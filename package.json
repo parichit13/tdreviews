@@ -12,5 +12,8 @@
     "express": "^4.16.3",
     "phantom": "^4.0.12",
     "validator": "^9.4.1"
+  },
+  "engines": {
+    "node": "8.10.0"
   }
 }
