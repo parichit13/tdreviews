@@ -3,6 +3,7 @@ const app = express()
 const bodyParser = require("body-parser");
 const index = require('./routes/index');
 const compression = require('compression')
+const logger = require('./logger');
 
 app.use(compression());
 app.use(bodyParser.json());
@@ -24,8 +25,11 @@ app.use(function(req, res, next) {
 
 // global error handler
 app.use(function (err, req, res, next) {
-  console.error(err.stack)
+  logger.error(err.stack)
   res.status(err.status || 500).send(err.message || 'Something broke!')
 })
 
-var server = app.listen(process.env.PORT || 3000, () => console.log('App now running on port', server.address().port));
+var server = app.listen(
+	process.env.PORT || 3000,
+	() => logger.info('App now running on port ' + server.address().port)
+	);

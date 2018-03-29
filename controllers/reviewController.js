@@ -1,5 +1,6 @@
 const validator = require('validator');
 const phantom = require('phantom');
+const logger = require('../logger');
 const { URL, URLSearchParams } = require('url');
 var instance, page;
 
@@ -16,7 +17,7 @@ exports.scrape = async function (req, res, next) {
 
 			// URL change listener
 			await page.on('onUrlChanged', function (targetUrl) {
-				console.log('New URL: ' + targetUrl);
+				logger.debug('New URL: ' + targetUrl);
 			});
 
 			try {
@@ -50,7 +51,7 @@ exports.scrape = async function (req, res, next) {
 					});
 				}
 				else {
-					console.log('No reviews');
+					logger.debug('No reviews');
 					res.status(200).json({message: 'No reviews found'});
 					await instance.exit();
 				}
