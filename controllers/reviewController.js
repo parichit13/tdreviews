@@ -30,17 +30,21 @@ exports.scrape = async function (req, res, next) {
 				if(result) {
 
 					// Adding records per page query parameter
-					var numReviews = result.slice(10, result.length - 1);
+					var numReviews = req.query.limit || result.slice(10, result.length - 1);
 					if(myURL.searchParams.get('recordsPerPage') != 'null') {
 						myURL.searchParams.append('recordsPerPage', numReviews);
 					}
 
 					// Reload page with all reviews
 					const status = await page.open(myURL.toString());
-					// console.log(status);
+					
+					// Inject Jquery for DOM Manipulation
 					page.includeJs("http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js")
 					.then(async function() {
-						var results = await scrapePage();
+						var results = {};
+						var reviews = await scrapePage();
+						results.size = reviews.length;
+						results.reviews = reviews;
 						res.status(200).json(results);
 						await instance.exit();
 					});
@@ -70,16 +74,16 @@ function scrapePage() {
 		// Parsing each review
 		 var review = {};
 		 
-		 // Review rating
-		 review.rating = parseFloat($(this).find("div.itemRating").text());
-		 
 		 // Review title and text
 		 review.title = $(this).children(".rightCol").find("h6").text();
-		 review.text = $(this).children(".rightCol").find("p").text();
+		 review.comment = $(this).children(".rightCol").find("p").text();
 
 		 //Reviewer Name
 		 review.reviewer_name = $(this).find(".reviewer dd:first").text();
 
+		 // Review rating
+		 review.rating = parseFloat($(this).find("div.itemRating").text());
+		 
 		 //Review date
 		 review.date = $(this).find(".reviewer dd:last").text();
 

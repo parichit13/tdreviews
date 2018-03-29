@@ -10,6 +10,6 @@ router.get('/', function(req, res, next) {
 	res.send('REST API for extracting Tiger Direct product reviews');
 });
 
-router.post('/', reviewController.scrape);
+router.post('/reviews', reviewController.scrape);
 
 module.exports = router;
