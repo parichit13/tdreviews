@@ -12,4 +12,6 @@ router.get('/', function(req, res, next) {
 
 router.post('/reviews', reviewController.scrape);
 
+router.post('/chrome', reviewController.hcscrape);
+
 module.exports = router;
