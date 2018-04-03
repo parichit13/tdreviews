@@ -76,7 +76,7 @@ exports.hcscrape = async function (req, res, next) {
 			var myURL = new URL(adr);
 			
 			// Initialize browser and page instances
-			browser = await puppeteer.launch();
+			browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   			tab = await browser.newPage();
 
 			try {
